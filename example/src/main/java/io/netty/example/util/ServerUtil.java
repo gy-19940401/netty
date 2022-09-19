@@ -27,6 +27,7 @@ import java.security.cert.CertificateException;
  */
 public final class ServerUtil {
 
+    //System.getProperty() 获取虚拟机参数
     private static final boolean SSL = System.getProperty("ssl") != null;
 
     private ServerUtil() {

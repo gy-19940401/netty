@@ -39,7 +39,10 @@ public final class HttpHelloWorldServer {
         // Configure SSL.
         final SslContext sslCtx = ServerUtil.buildSslContext();
 
-        // Configure the server.
+        // Configure the server.（主从多线程 Reactor 模式{
+        //    主线程：用于接受请求 --> 默认线程数为 1
+        //    从线程：用于处理请求 --> childHandler --> 处理请求的方法
+        // }）
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {

@@ -39,25 +39,32 @@ public final class DiscardServer {
         // Configure SSL.
         final SslContext sslCtx = ServerUtil.buildSslContext();
 
+        //主事件循环组
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
+        //从事件循环组
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
+            //实列化 服务 启动类 （监听连接）
             ServerBootstrap b = new ServerBootstrap();
             b.group(bossGroup, workerGroup)
-             .channel(NioServerSocketChannel.class)
-             .handler(new LoggingHandler(LogLevel.INFO))
-             .childHandler(new ChannelInitializer<SocketChannel>() {
-                 @Override
-                 public void initChannel(SocketChannel ch) {
-                     ChannelPipeline p = ch.pipeline();
-                     if (sslCtx != null) {
-                         p.addLast(sslCtx.newHandler(ch.alloc()));
-                     }
-                     p.addLast(new DiscardServerHandler());
-                 }
-             });
+                    //通道 IO 方式
+                    .channel(NioServerSocketChannel.class)
+                    //日志处理
+                    .handler(new LoggingHandler(LogLevel.INFO))
+                    //自定义处理
+                    .childHandler(new ChannelInitializer<SocketChannel>() {
+                        @Override
+                        public void initChannel(SocketChannel ch) {
+                            ChannelPipeline p = ch.pipeline();
+                            if (sslCtx != null) {
+                                p.addLast(sslCtx.newHandler(ch.alloc()));
+                            }
+                            p.addLast(new DiscardServerHandler());
+                        }
+                    });
 
             // Bind and start to accept incoming connections.
+            //绑定服务到端口
             ChannelFuture f = b.bind(PORT).sync();
 
             // Wait until the server socket is closed.

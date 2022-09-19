@@ -29,22 +29,39 @@ public class DiscardClientHandler extends SimpleChannelInboundHandler<Object> {
     private ByteBuf content;
     private ChannelHandlerContext ctx;
 
+    /**
+     * 建立连接后执行：出站事件 -> 连接激活
+     *
+     * @param ctx
+     */
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
         this.ctx = ctx;
 
         // Initialize the message.
         content = ctx.alloc().directBuffer(DiscardClient.SIZE).writeZero(DiscardClient.SIZE);
-
         // Send the initial messages.
         generateTraffic();
     }
 
+    /**
+     * 断开连接后执行 ：出站事件 -> 连接失活
+     *
+     * @param ctx
+     */
     @Override
     public void channelInactive(ChannelHandlerContext ctx) {
         content.release();
     }
 
+    /**
+     * 客服端收到 服务端的消息
+     *
+     * @param ctx the {@link ChannelHandlerContext} which this {@link SimpleChannelInboundHandler}
+     *            belongs to
+     * @param msg the message to handle
+     * @throws Exception
+     */
     @Override
     public void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
         // Server is supposed to send nothing, but if it sends something, discard it.

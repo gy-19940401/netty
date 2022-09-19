@@ -36,7 +36,9 @@ public class HttpHelloWorldServerInitializer extends ChannelInitializer<SocketCh
         if (sslCtx != null) {
             p.addLast(sslCtx.newHandler(ch.alloc()));
         }
+        //netty 针对 http 请求的编码
         p.addLast(new HttpServerCodec());
+        // netty 异常处理
         p.addLast(new HttpServerExpectContinueHandler());
         p.addLast(new HttpHelloWorldServerHandler());
     }

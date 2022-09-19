@@ -41,6 +41,7 @@ public final class DiscardClient {
 
         EventLoopGroup group = new NioEventLoopGroup();
         try {
+            // 连接服务端
             Bootstrap b = new Bootstrap();
             b.group(group)
              .channel(NioSocketChannel.class)

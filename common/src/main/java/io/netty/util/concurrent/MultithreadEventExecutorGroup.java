@@ -70,6 +70,7 @@ public abstract class MultithreadEventExecutorGroup extends AbstractEventExecuto
      */
     protected MultithreadEventExecutorGroup(int nThreads, Executor executor,
                                             EventExecutorChooserFactory chooserFactory, Object... args) {
+        //线程数非负校验
         checkPositive(nThreads, "nThreads");
 
         if (executor == null) {

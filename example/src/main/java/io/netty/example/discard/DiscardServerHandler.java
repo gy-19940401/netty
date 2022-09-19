@@ -23,15 +23,41 @@ import io.netty.channel.SimpleChannelInboundHandler;
  */
 public class DiscardServerHandler extends SimpleChannelInboundHandler<Object> {
 
+    /**
+     * 通道读信息
+     * Is called for each message of type {@link Object}.
+     *
+     * @param ctx the {@link ChannelHandlerContext} which this {@link SimpleChannelInboundHandler}
+     *            belongs to
+     * @param msg the message to handle
+     * @throws Exception is thrown if an error occurred
+     */
     @Override
     public void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
         // discard
     }
 
+    /**
+     * 异常的处理
+     *
+     * @param ctx
+     * @param cause
+     */
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
         // Close the connection when an exception is raised.
         cause.printStackTrace();
         ctx.close();
+    }
+
+    /**
+     * 通道 read 完成后执行
+     *
+     * @param ctx
+     * @throws Exception
+     */
+    @Override
+    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+        ctx.flush();
     }
 }
