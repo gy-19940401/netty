@@ -28,7 +28,8 @@ public final class DefaultEventExecutorChooserFactory implements EventExecutorCh
 
     public static final DefaultEventExecutorChooserFactory INSTANCE = new DefaultEventExecutorChooserFactory();
 
-    private DefaultEventExecutorChooserFactory() { }
+    private DefaultEventExecutorChooserFactory() {
+    }
 
     @Override
     public EventExecutorChooser newChooser(EventExecutor[] executors) {
@@ -44,6 +45,7 @@ public final class DefaultEventExecutorChooserFactory implements EventExecutorCh
     }
 
     private static final class PowerOfTwoEventExecutorChooser implements EventExecutorChooser {
+        //边界时的 局部不公平
         private final AtomicInteger idx = new AtomicInteger();
         private final EventExecutor[] executors;
 
@@ -53,6 +55,7 @@ public final class DefaultEventExecutorChooserFactory implements EventExecutorCh
 
         @Override
         public EventExecutor next() {
+            // 与运算 提高效率 && executors =2^n
             return executors[idx.getAndIncrement() & executors.length - 1];
         }
     }
@@ -70,6 +73,7 @@ public final class DefaultEventExecutorChooserFactory implements EventExecutorCh
 
         @Override
         public EventExecutor next() {
+            //取模运算的效率并不高
             return executors[(int) Math.abs(idx.getAndIncrement() % executors.length)];
         }
     }

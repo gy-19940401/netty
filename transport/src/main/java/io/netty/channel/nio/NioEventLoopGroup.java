@@ -57,15 +57,20 @@ public class NioEventLoopGroup extends MultithreadEventLoopGroup {
 
     /**
      * Create a new instance using the specified number of threads, the given {@link ThreadFactory} and the
-     * {@link SelectorProvider} which is returned by {@link SelectorProvider#provider()}.
-     *
-     * SelectorProvider.provider() 这是什么东西 ？？？？
+     * {@link SelectorProvider} which is returned by {@link SelectorProvider#provider(){}.
+     * <p>
+     * SelectorProvider.provider() 这是什么东西 ？？？？ 提供 netty 实现跨平台 基于 JDK 包的实现
+     * 1、虚拟机参数 ：java.nio.channels.spi.SelectorProvider
+     * 2、类加载的方式 :
+     * 3、基于 JDK 实现的 ：DefaultSelectorProvider
      */
     public NioEventLoopGroup(int nThreads, ThreadFactory threadFactory) {
         this(nThreads, threadFactory, SelectorProvider.provider());
     }
 
     public NioEventLoopGroup(int nThreads, Executor executor) {
+        // SelectorProvider.provider() --> JDK 的代码 实现跨平台的基石
+        // 创建 连接 Selector
         this(nThreads, executor, SelectorProvider.provider());
     }
 

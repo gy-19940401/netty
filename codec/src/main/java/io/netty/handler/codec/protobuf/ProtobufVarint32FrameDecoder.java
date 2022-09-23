@@ -39,6 +39,8 @@ import java.util.List;
  *
  * @see CodedInputStream
  * @see CodedInputByteBufferNano
+ *
+ * 长度可变的编解码器
  */
 public class ProtobufVarint32FrameDecoder extends ByteToMessageDecoder {
 
